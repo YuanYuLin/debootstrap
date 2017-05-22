@@ -17,7 +17,7 @@ def MAIN_EXTRACT(args):
     output_dir = args["output_path"]
     base_rootfs_tarball = ops.getEnv("BASE_ROOTFS_TARBALL")
     if ops.isExist(base_rootfs_tarball):
-        ops.extractTarXz(base_rootfs_tarball, output_path)
+        ops.unTarXz(base_rootfs_tarball, output_dir)
     else:
         output_path=ops.pkg_mkdir(output_dir, "debian_jessie_armhf")
         download_url = 'ftp://ftp.debian.org/debian/'
