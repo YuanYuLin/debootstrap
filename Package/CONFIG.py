@@ -43,7 +43,7 @@ def MAIN_EXTRACT(args):
     set_global(args)
     CMD = []
     if do_debootstrap != "Y":
-        ops.unTarXz(base_rootfs_tarball, output_dir)
+        ops.unTarXzSUDO(base_rootfs_tarball, output_dir)
     else:
         if arch == "armhf": # hard flot
             output_path=ops.pkg_mkdir(output_dir, "debian_jessie_armhf")
