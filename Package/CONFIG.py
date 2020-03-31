@@ -26,7 +26,7 @@ def set_global(args):
     elif arch == "armel":
         base_rootfs_dir = ops.path_join(output_dir, "debian_jessie_armel")
     elif arch == "x86_64":
-        base_rootfs_dir = ops.path_join(output_dir, "base_rootfs")
+        base_rootfs_dir = ops.path_join(output_dir, "debian_jessie_x86_64")
     else:
         sys.exit(1)
 
@@ -42,23 +42,24 @@ def MAIN_ENV(args):
 def MAIN_EXTRACT(args):
     set_global(args)
     CMD = []
-    if do_debootstrap != "Y":
+    if do_debootstrap.lower() != "Y".lower():
         ops.unTarXzSUDO(base_rootfs_tarball, output_dir)
     else:
         if arch == "armhf": # hard flot
             output_path=ops.pkg_mkdir(output_dir, "debian_jessie_armhf")
-            download_url = 'ftp://ftp.debian.org/debian/'
-            CMD=["qemu-debootstrap", "--arch=armhf", "jessie", output_path, download_url]
+            download_url = 'http://ftp.debian.org/debian/'
+            CMD=["sudo", "qemu-debootstrap", "--arch=armhf", "jessie", output_path, download_url]
         elif arch == "armel": # soft flot
             output_path=ops.pkg_mkdir(output_dir, "debian_jessie_armel")
-            download_url = 'ftp://ftp.debian.org/debian/'
+            download_url = 'http://ftp.debian.org/debian/'
             #CMD=["qemu-debootstrap", "--arch=" + arch, "jessie", output_path, download_url]
-            CMD=["qemu-debootstrap", "--arch=armel", "stable", "--variant=minbase", output_path, download_url]
+            CMD=["sudo", "qemu-debootstrap", "--arch=armel", "jessie", "--variant=minbase", output_path, download_url]
         elif arch == "x86_64":
-            output_path=ops.pkg_mkdir(output_dir, "debian_base_rootfs")
-            download_url = 'ftp://ftp.debian.org/debian/'
-            CMD=["qemu-debootstrap", "--arch=amd64", "stable", "--variant=minbase", output_path, download_url]
+            output_path=ops.pkg_mkdir(output_dir, "debian_jessie_x86_64")
+            download_url = 'http://ftp.debian.org/debian/'
+            CMD=["sudo", "qemu-debootstrap", "--arch=amd64", "jessie", "--variant=minbase", output_path, download_url]
 
+        print CMD
         res = ops.execCmd(CMD, output_path, False, None)
 
     return True
